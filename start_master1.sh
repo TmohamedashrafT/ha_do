@@ -1,4 +1,27 @@
 #!/bin/bash
+
+if [ ! -d "/home/hadoop/packages/ha_do" ]; then
+  sudo apt install git -y
+  sudo git clone https://github.com/TmohamedashrafT/ha_do.git /home/hadoop/packages/ha_do
+fi
+
+if [ ! -d "/home/hadoop/packages/hadoop-3.3.6" ]; then  
+  sudo tar --owner=hadoop -xzf /home/hadoop/hadoop-3.3.6.tar.gz -C /home/hadoop/packages
+  sudo rm /home/hadoop/hadoop-3.3.6.tar.gz
+	sudo cp /home/hadoop/packages/ha_do/core-site.xml /home/hadoop/packages/hadoop-3.3.6/etc/hadoop/
+	sudo cp /home/hadoop/packages/ha_do/hdfs-site.xml /home/hadoop/packages/hadoop-3.3.6/etc/hadoop/
+	sudo cp /home/hadoop/packages/ha_do/mapred-site.xml /home/hadoop/packages/hadoop-3.3.6/etc/hadoop/
+	sudo cp /home/hadoop/packages/ha_do/yarn-site.xml /home/hadoop/packages/hadoop-3.3.6/etc/hadoop/
+fi
+
+if [ ! -d "/home/hadoop/packages/zookeeper-3.8.4" ]; then
+   sudo tar --owner=hadoop -xzf /home/hadoop/apache-zookeeper-3.8.4-bin.tar.gz -C /home/hadoop/packages
+   sudo mv /home/hadoop/packages/apache-zookeeper-3.8.4-bin /home/hadoop/packages/zookeeper-3.8.4
+   sudo rm /home/hadoop/apache-zookeeper-3.8.4-bin.tar.gz
+   cp /home/hadoop/packages/ha_do/zoo.cfg /home/hadoop/packages/zookeeper-3.8.4/conf/
+fi
+
+
 echo "Starting JournalNode on $(hostname)...";
 hdfs --daemon start journalnode;
 
